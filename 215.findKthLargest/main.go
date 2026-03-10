@@ -2,149 +2,40 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 )
 
 func findKthLargest(nums []int, k int) int {
-	// l := len(nums)
-	// if k > l {
-	// 	panic("k is larger than array len!")
-	// }
-	// k_nums := make([]int, 0, k)
-	// for i := 0; i < k; i++ {
-	// 	k_nums = append(k_nums, nums[i])
-	// 	j := len(k_nums) - 1
-	// 	for j > 0 {
-	// 		if k_nums[j] < k_nums[(j-1)/2] {
-	// 			swap(&k_nums[j], &k_nums[(j-1)/2])
-	// 		} else {
-	// 			break
-	// 		}
-
-	// 		j = (j - 1) / 2
-	// 	}
-	// }
-
-	// // fmt.Println(k_nums)
-
-	// for i := k; i < l; i++ {
-	// 	j := 0
-	// 	if nums[i] > k_nums[j] {
-	// 		k_nums[j] = nums[i]
-	// 		to_swap_index := 2*j + 1
-	// 		for to_swap_index < k {
-	// 			to_swap_nums := k_nums[to_swap_index]
-	// 			if to_swap_index+1 < k {
-	// 				if to_swap_nums > k_nums[to_swap_index+1] {
-	// 					to_swap_index = to_swap_index + 1
-	// 				}
-	// 			}
-
-	// 			if k_nums[j] > k_nums[to_swap_index] {
-	// 				swap(&k_nums[j], &k_nums[to_swap_index])
-	// 				j = to_swap_index
-	// 				to_swap_index = 2*j + 1
-	// 			} else {
-	// 				break
-	// 			}
-
-	// 		}
-	// 	}
-	// 	//fmt.Println(k_nums)
-	// }
-	// //fmt.Println(k_nums)
-
-	// return k_nums[0]
-
-	// l := len(nums)
-	// if k > l {
-	// 	panic("k is larger than array len!")
-	// }
-	// k_nums := make([]int, k)
-	// copy(k_nums, nums[:k])
-	// buildMinHeap(k_nums)
-
-	// for i := k; i < l; i++ {
-	// 	if nums[i] > k_nums[0] {
-	// 		k_nums[0] = nums[i]
-	// 		siftDown(k_nums, 0, k)
-	// 	}
-
-	// }
-
-	// return k_nums[0]
-
-	target := len(nums) - k
-	left := 0
-	right := len(nums) - 1
-
-	return partition(nums, left, right, target)
-
+	return partions(nums, 0, len(nums)-1, len(nums)-k)
 }
 
-// func swap(a, b *int) {
-// 	tmp := *a
-// 	*a = *b
-// 	*b = tmp
-// }
-
-// func buildMinHeap(heap []int) {
-// 	l := len(heap)
-// 	for i := l/2 - 1; i >= 0; i-- {
-// 		siftDown(heap, i, l)
-// 	}
-// }
-
-// func siftDown(heap []int, i int, size int) {
-// 	for {
-// 		left := 2*i + 1
-// 		if left >= size {
-// 			break
-// 		}
-// 		right := left + 1
-// 		smallest := left
-// 		if right < size && heap[smallest] > heap[right] {
-// 			smallest = right
-// 		}
-
-// 		if heap[i] <= heap[smallest] {
-// 			break
-// 		}
-
-// 		heap[i], heap[smallest] = heap[smallest], heap[i]
-// 		i = smallest
-// 	}
-// }
-
-func partition(nums []int, left, right, k int) int {
-	if left == right {
-		return nums[left]
+func partions(nums []int, l, r, k int) int {
+	fmt.Println(l, r, nums, nums[l])
+	if l == r {
+		return nums[l]
 	}
-
-	randidx := rand.Intn(right-left+1) + left
-	nums[randidx], nums[left] = nums[left], nums[randidx]
-	pivot := nums[left]
-	i := left - 1
-	j := right + 1
-
+	postion := l
+	p_num := nums[postion]
+	i := l - 1
+	j := r + 1
 	for i < j {
-		for i++; nums[i] < pivot; {
-			i++
+		for i++; nums[i] < p_num; i++ {
+
 		}
 
-		for j--; nums[j] > pivot; {
-			j--
+		for j--; nums[j] > p_num; j-- {
+
 		}
 
 		if i < j {
 			nums[i], nums[j] = nums[j], nums[i]
 		}
-	}
 
-	if k <= j {
-		return partition(nums, left, j, k)
+	}
+	fmt.Println(i, j, k, nums)
+	if j < k {
+		return partions(nums, j+1, r, k)
 	} else {
-		return partition(nums, j+1, right, k)
+		return partions(nums, l, j, k)
 	}
 }
 
